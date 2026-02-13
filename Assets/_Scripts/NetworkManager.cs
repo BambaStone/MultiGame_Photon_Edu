@@ -77,18 +77,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LocalPlayer.NickName = NickNameInput.text;
         ConnectPannel.SetActive(false);
         aimUI.SetActive(true);
-        StartCoroutine(CoDestroyBullet());
         SpawnPlayer();
     }
 
-    IEnumerator CoDestroyBullet()
-    {
-        yield return new WaitForSeconds(0.2f);
-        foreach(GameObject go in GameObject.FindGameObjectsWithTag("Bullet"))
-        {
-            go.GetComponent<PhotonView>().RPC("DestroyRPC",RpcTarget.All);
-        }
-    }
+
 
 
     //연결 해제시 호출

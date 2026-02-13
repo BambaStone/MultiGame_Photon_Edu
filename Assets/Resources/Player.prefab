@@ -516,7 +516,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3200bcc81d4868f49bd0afca6f50701f, type: 2}
+  - {fileID: 2100000, guid: 72303335385d564448fad05f71a5c0f2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -961,9 +961,11 @@ MonoBehaviour:
   CameraPos: {fileID: 1928890272229988742}
   Muzzle: {fileID: 2930601223228120911}
   MouseSensitivity: 1000
+  GhostRenderer: {fileID: 3589086931569656902}
   InfoWidget: {fileID: 306335674169013749}
   NickNameText: {fileID: 4560021088568258876}
   CurrentHpImage: {fileID: 1833228730971537610}
+  Dissolve: 1
 --- !u!54 &6863287610696608977
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -21,16 +21,19 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     private float _playerYRot = 0f;
     private bool _run = false;
 
+    public Renderer GhostRenderer;
 
     public GameObject InfoWidget;
     public TMP_Text NickNameText;
     public Image CurrentHpImage;
 
     PhotonView _photonView;
+    public float Dissolve=0f;
 
     Vector3 _currentPos;
     Quaternion _currentRotation;
     Quaternion _currentHeadRotation;
+    float _currentDissolve = 0f;
 
     float _currentHp = 10f;
     float _maxHp = 10f;
@@ -60,14 +63,43 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         {
             Move();
             Fire();
+            Dissolves();
         }
         else
         {
             transform.position = _currentPos;
             transform.rotation = _currentRotation;
             Head.transform.rotation = _currentHeadRotation;
+            GhostRenderer.material.SetFloat("_Cut", _currentDissolve);
         }
         InfoWidget.transform.LookAt(Camera.main.transform.position);
+        
+    }
+
+    void Dissolves()
+    {
+        if (Input.GetKey(KeyCode.Q))
+        {
+            Dissolve = Dissolve + Time.deltaTime * 2;
+            if (1<_currentDissolve)
+            {
+                Dissolve = 1;
+            }
+            GhostRenderer.material.SetFloat("_Cut", Dissolve);
+        }
+        else
+        {
+            if (0<Dissolve)
+            {
+                Dissolve = Dissolve - Time.deltaTime * 2f;
+                if(Dissolve<0.01f)
+                {
+                    Dissolve = 0f;
+                }
+                GhostRenderer.material.SetFloat("_Cut", Dissolve);
+            }
+            
+        }
     }
 
     private void FixedUpdate()
@@ -217,6 +249,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             stream.SendNext(transform.rotation);
             stream.SendNext(CurrentHpImage.fillAmount);
             stream.SendNext(Head.transform.rotation);
+            stream.SendNext(Dissolve);
         }
         if(stream.IsReading)
         {
@@ -224,7 +257,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             _currentRotation = (Quaternion)stream.ReceiveNext();
             CurrentHpImage.fillAmount = (float)stream.ReceiveNext();
             _currentHeadRotation = (Quaternion)stream.ReceiveNext();
-
+            _currentDissolve = (float)stream.ReceiveNext();
         }
     }
 
